@@ -1,0 +1,103 @@
+Inductive = using particular facts and
+examples to form general rules and principles
+
+Inductive definitions
+
+- factorial
+    f(0) = 1 <- base case
+    f(n) = n * f(n-1) <- inductive case
+- insertion sort
+    isort([]) = [] <- base case
+    isort([x1,x2,...xn]) = insert(x1,isort([x1,x2,...xn])) <- inductive case
+
+Inductive program yields a recursive program
+
+Recursive Programs
+
+def factorial(n):
+    if n<=0:
+        return(1)
+    else:
+        return(n*factorial(n-1))
+
+Subproblems are to be solved to get the desired answer
+here factorial(n-1) is a subproblem
+isort([x1,x2,...xn]) <- subproblem for any 1<=i<=j<=n
+
+solution of f(y) can be derived by combining solutions to subproblems
+
+Evaluating Subproblems
+
+Fibonacci numbers
+fib(0) = 0
+fib(1) = 1
+fib(n) - fib(n-1) + fib(n-2)
+
+def fib(n):
+    if n==0 or n==1:
+        value = n
+    else:
+        value = fib(n-1)+fib(n-2)
+    return(value)
+                             fib(5)
+                        3/           \2
+                    fib(4)          fib(3)
+                    2/   \1            1/ \1
+                fib(3)  fib(2)      fib(2) fib(1)
+                1/   \1    1/   \0   1/  \0
+            fib(2) fib(1) fib(1)fib(0)fib(1)fib(0)
+          1/   \0
+       fib(1)fib(0)
+
+Never re-evaluate a subproblem
+
+build a table of values already computed
+    memory table
+memoization = writing a memo/reminder
+    remind yourself that this value has already been seen before
+
+Memoized fib(5)
+table
+k fib(k)
+1  1
+0  0
+2  1
+3  2
+4  3
+
+we never solved the subproblem twice
+store each newly computed value in table
+look up table before starting a recursive computation
+computation tree is linear
+
+you just need a dictionary for every combination of arguments
+if that value has been computed before that key will
+be there in our table
+
+Memoized fibonacci
+
+def fib(n):
+    if fibtable[n]:
+        return(fibtable[n])
+    if n==0 or n==1:
+        value = n
+    else:
+        value=fib(n-1) + fib(n-2)
+fibtable[n]=value
+return(value)
+
+Dynamic Programming
+It is a strategy to further optimize this memoized recursion
+
+Anticipate what the memory table looks like
+    subproblems are known from problem structure
+Solve subproblems in order of dependencies
+    must be acyclic
+
+Dynamic programming fibonacci
+def fib(n):
+    fibtable[0]=0
+    fibtable[1]=1
+    for i in range(2,n+1):
+        fibtable[i]=fibtable[i-1] + fibtable[i-2]
+return(fibtable[n])
